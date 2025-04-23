@@ -11,6 +11,7 @@ function App() {
 
   const [editStudent, setEditStudent] = useState(null)
   const [newStudent, setNewStudent] = useState({ name: '', className: '', age: '' })
+  const [searchTerm, setSearchTerm] = useState('')
 
   // Handle adding a new student
   const addStudent = () => {
@@ -37,6 +38,11 @@ function App() {
       setEditStudent(null)
     }
   }
+
+  // Filter students based on search term
+  const filteredStudents = students.filter((student) =>
+    student.name.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
@@ -76,6 +82,17 @@ function App() {
         </div>
       </div>
 
+      {/* Search Input */}
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Tìm kiếm theo tên..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border p-2 rounded w-full"
+        />
+      </div>
+
       {/* Student List */}
       <table className="w-full border-collapse">
         <thead>
@@ -87,7 +104,7 @@ function App() {
           </tr>
         </thead>
         <tbody>
-          {students.map((student) => (
+          {filteredStudents.map((student) => (
             <tr key={student.id} className="border-b">
               <td className="py-2 px-4 text-left">{student.name}</td>
               <td className="py-2 px-4 text-left">{student.className}</td>
@@ -113,8 +130,8 @@ function App() {
 
       {/* Edit Modal */}
       {editStudent && (
-       <div className="fixed inset-0 bg-opacity-30 flex items-center justify-center ">
-          <div className="bg-white p-6 rounded max-w-md w-full border-1 border-gray-500">
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-30 backdrop-blur-md flex items-center justify-center">
+          <div className="bg-white p-6 rounded max-w-md w-full">
             <h2 className="text-lg font-semibold mb-4">Sửa thông tin sinh viên</h2>
             <div className="flex flex-col gap-2">
               <input
