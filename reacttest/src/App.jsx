@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import StudentItem from './components/StudentItem'
 import './App.css'
 
 function App() {
@@ -131,25 +132,12 @@ function App() {
         </thead>
         <tbody>
           {filteredStudents.map((student) => (
-            <tr key={student.id} className="border-b">
-              <td className="py-2 px-4 text-left">{student.name}</td>
-              <td className="py-2 px-4 text-left">{student.className}</td>
-              <td className="py-2 px-4 text-left">{student.age}</td>
-              <td className="py-2 px-4 text-left">
-                <button
-                  onClick={() => startEdit(student)}
-                  className="bg-blue-500 text-white px-2 py-1 rounded mr-2 hover:bg-blue-600"
-                >
-                  Sửa
-                </button>
-                <button
-                  onClick={() => deleteStudent(student.id)}
-                  className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                >
-                  Xoá
-                </button>
-              </td>
-            </tr>
+            <StudentItem
+              key={student.id}
+              student={student}
+              onDelete={deleteStudent}
+              onEdit={startEdit}
+            />
           ))}
         </tbody>
       </table>
