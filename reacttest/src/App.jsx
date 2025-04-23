@@ -13,6 +13,8 @@ function App() {
   const [newStudent, setNewStudent] = useState({ name: '', className: '', age: '' })
   const [searchTerm, setSearchTerm] = useState('')
 
+  const [selectedClass, setSelectedClass] = useState('')
+  
   // Handle adding a new student
   const addStudent = () => {
     if (newStudent.name && newStudent.className && newStudent.age) {
@@ -39,9 +41,14 @@ function App() {
     }
   }
 
-  // Filter students based on search term
-  const filteredStudents = students.filter((student) =>
-    student.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // Get unique class names for dropdown
+  const classes = [...new Set(students.map((student) => student.className))]
+
+  // Filter students based on search term and selected class
+  const filteredStudents = students.filter(
+    (student) =>
+      student.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (selectedClass === '' || student.className === selectedClass)
   )
 
   return (
@@ -82,15 +89,25 @@ function App() {
         </div>
       </div>
 
-      {/* Search Input */}
-      <div className="mb-4">
+      {/* Search and Filter */}
+      <div className="mb-4 flex gap-4">
         <input
           type="text"
           placeholder="Tìm kiếm theo tên..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="border p-2 rounded w-full"
+          className="border p-2 rounded flex-1"
         />
+        <select
+          value={selectedClass}
+          onChange={(e) => setSelectedClass(e.target.value)}
+          className="border p-2 rounded w-48"
+        >
+          <option value="">Tất cả lớp</option>
+          {classes.map((cls) => (
+            <option key={cls} value={cls}>{cls}</option>
+          ))}
+        </select>
       </div>
 
       {/* Student List */}
