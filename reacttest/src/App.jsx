@@ -19,6 +19,11 @@ function App() {
     }
   }
 
+  // Handle deleting a student
+  const deleteStudent = (id) => {
+    setStudents(students.filter((student) => student.id !== id))
+  }
+
   return (
     <div className="container mx-auto p-4 max-w-4xl">
       <h1 className="text-2xl font-bold mb-4">Quản lý danh sách sinh viên</h1>
@@ -72,11 +77,11 @@ function App() {
             <tr key={student.id} className="border-b">
               <td className="py-2 px-4 text-left">{student.name}</td>
               <td className="py-2 px-4 text-left">{student.className}</td>
-              <td className="py-2 px-4 text-left ">{student.age}</td>
+              <td className="py-2 px-4 text-left">{student.age}</td>
               <td className="py-2 px-4 text-left">
                 <button
+                  onClick={() => deleteStudent(student.id)}
                   className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                  disabled
                 >
                   Xoá
                 </button>
