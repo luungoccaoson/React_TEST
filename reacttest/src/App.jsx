@@ -9,6 +9,7 @@ function App() {
     { id: uuidv4(), name: 'Trần Thị B', className: 'CNTT2', age: 21 },
   ])
 
+  const [editStudent, setEditStudent] = useState(null)
   const [newStudent, setNewStudent] = useState({ name: '', className: '', age: '' })
 
   // Handle adding a new student
@@ -22,6 +23,19 @@ function App() {
   // Handle deleting a student
   const deleteStudent = (id) => {
     setStudents(students.filter((student) => student.id !== id))
+  }
+
+  // Handle starting edit
+  const startEdit = (student) => {
+    setEditStudent(student)
+  }
+
+  // Handle saving edited student
+  const saveEdit = () => {
+    if (editStudent.name && editStudent.className && editStudent.age) {
+      setStudents(students.map((s) => (s.id === editStudent.id ? { ...editStudent, age: parseInt(editStudent.age) } : s)))
+      setEditStudent(null)
+    }
   }
 
   return (
@@ -80,6 +94,12 @@ function App() {
               <td className="py-2 px-4 text-left">{student.age}</td>
               <td className="py-2 px-4 text-left">
                 <button
+                  onClick={() => startEdit(student)}
+                  className="bg-blue-500 text-white px-2 py-1 rounded mr-2 hover:bg-blue-600"
+                >
+                  Sửa
+                </button>
+                <button
                   onClick={() => deleteStudent(student.id)}
                   className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
                 >
@@ -90,6 +110,52 @@ function App() {
           ))}
         </tbody>
       </table>
+
+      {/* Edit Modal */}
+      {editStudent && (
+       <div className="fixed inset-0 bg-opacity-30 flex items-center justify-center ">
+          <div className="bg-white p-6 rounded max-w-md w-full border-1 border-gray-500">
+            <h2 className="text-lg font-semibold mb-4">Sửa thông tin sinh viên</h2>
+            <div className="flex flex-col gap-2">
+              <input
+                type="text"
+                value={editStudent.name}
+                onChange={(e) => setEditStudent({ ...editStudent, name: e.target.value })}
+                className="border p-2 rounded"
+                placeholder="Họ tên"
+              />
+              <input
+                type="text"
+                value={editStudent.className}
+                onChange={(e) => setEditStudent({ ...editStudent, className: e.target.value })}
+                className="border p-2 rounded"
+                placeholder="Lớp"
+              />
+              <input
+                type="number"
+                value={editStudent.age}
+                onChange={(e) => setEditStudent({ ...editStudent, age: e.target.value })}
+                className="border p-2 rounded"
+                placeholder="Tuổi"
+              />
+              <div className="flex gap-2 mt-4">
+                <button
+                  onClick={saveEdit}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                  Lưu
+                </button>
+                <button
+                  onClick={() => setEditStudent(null)}
+                  className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                >
+                  Huỷ
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
