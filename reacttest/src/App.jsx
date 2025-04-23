@@ -1,20 +1,29 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import './App.css'
 
 function App() {
-
-  const [students, setStudents] = useState([
-    { id: uuidv4(), name: 'Lưu Ngọc Cao Sơn', className: 'DHKTPM18ATT', age: 22 },
-    { id: uuidv4(), name: 'Trần Thị B', className: 'CNTT2', age: 21 },
-  ])
+  // Initialize students from localStorage or use sample data
+  const [students, setStudents] = useState(() => {
+    const savedStudents = localStorage.getItem('students')
+    return savedStudents
+      ? JSON.parse(savedStudents)
+      : [
+          { id: uuidv4(), name: 'Lưu Ngọc Cao Sơn', className: 'DHKTPM18ATT', age: 22 },
+          { id: uuidv4(), name: 'Trần Thị B', className: 'CNTT2', age: 21 },
+        ]
+  })
 
   const [editStudent, setEditStudent] = useState(null)
   const [newStudent, setNewStudent] = useState({ name: '', className: '', age: '' })
   const [searchTerm, setSearchTerm] = useState('')
-
   const [selectedClass, setSelectedClass] = useState('')
-  
+
+  // Save students to localStorage whenever students change
+  useEffect(() => {
+    localStorage.setItem('students', JSON.stringify(students))
+  }, [students])
+
   // Handle adding a new student
   const addStudent = () => {
     if (newStudent.name && newStudent.className && newStudent.age) {
